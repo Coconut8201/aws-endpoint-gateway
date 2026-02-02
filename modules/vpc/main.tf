@@ -9,12 +9,21 @@ resource "aws_vpc" "this" {
 
 # Subnet
 resource "aws_subnet" "sbt" {
-  vpc_id            = aws_vpc.this.id
-  cidr_block        = var.subnet_cidr_block
-  availability_zone = var.az
+  vpc_id                  = aws_vpc.this.id
+  cidr_block              = var.subnet_cidr_block
+  availability_zone       = var.az
+  map_public_ip_on_launch = true
 
   tags = {
     Name = "${var.vpc_name}-subnet"
+  }
+}
+
+# Internet Gateway
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.this.id
+  tags = {
+    Name = "${var.vpc_name}-igw"
   }
 }
 
@@ -25,6 +34,13 @@ resource "aws_route_table" "rtb" {
   tags = {
     Name = "${var.vpc_name}-rtb"
   }
+}
+
+# Route to Internet
+resource "aws_route" "to_internet" {
+  route_table_id         = aws_route_table.rtb.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 # Associate Private Subnets with Route Table

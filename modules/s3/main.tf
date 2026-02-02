@@ -8,7 +8,6 @@ resource "aws_s3_bucket" "s3" {
 
 # S3 Bucket Policy - Only allow access from VPC Endpoint
 resource "aws_s3_bucket_policy" "this" {
-  count  = var.vpc_endpoint_id != null ? 1 : 0
   bucket = aws_s3_bucket.s3.id
 
   policy = jsonencode({
