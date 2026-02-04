@@ -6,4 +6,4 @@
 ![圖片1](images/image1.jpg)
 
 使用aws console 無法查看該 bucket 的內容
-![使用 aws console](images/iamge2.png)
+![使用 aws console](images/image2.png)
